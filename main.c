@@ -2,12 +2,6 @@
 #include <stdlib.h>
 
 
-typedef enum DIRECTION {
-	RIGHT,
-	DOWN,
-	LEFT,
-	UP
-} DIRECTION;
 
 /*
 Takes a pointer to the square array *arr
@@ -30,14 +24,17 @@ void printSquareArr(int *arr,int a){
 
 }
 
-#define SIZE 15
-
-int main(){
-	int a = SIZE;	// this variable will be needed in the future, for dynamically allocated array
-	int arr[SIZE][SIZE];	// instead of this static array with fixed size
+void fillSpiralArray(int *arr, int a){
 	int i,j;
 	int i_top,i_bottom,j_right,j_left;	// borders of the spiral
 	int n;
+
+	typedef enum DIRECTION {
+		RIGHT,
+		DOWN,
+		LEFT,
+		UP
+	} DIRECTION;
 
 	DIRECTION dir = RIGHT;
 
@@ -46,28 +43,28 @@ int main(){
 		i_top = 1,
 		i_bottom = j_right = a-1; 
 
-		n <= a*a;
+	n <= a*a;
 
-		++n){
-		arr[i][j] = n;
+	++n){
+		arr[i*a + j] = n;
 		if (dir == RIGHT)
 			if (j < j_right)
 				++j;
 			else {
-					dir = DOWN;
-					--j_right; // right border "shrinks" towards the center
-					++i;
-				
+				dir = DOWN;
+				--j_right; // right border "shrinks" towards the center
+				++i;
+
 			}
 		else if (dir == DOWN)
-				if (i < i_bottom)
-					++i;
-				else {
-					dir = LEFT;
-					--i_bottom;
-					--j;
-					
-				}
+			if (i < i_bottom)
+				++i;
+			else {
+				dir = LEFT;
+				--i_bottom;
+				--j;
+
+			}
 		else if (dir == LEFT)
 			if(j > j_left)
 				--j;
@@ -75,20 +72,27 @@ int main(){
 				dir = UP;
 				++j_left;
 				--i;
-				
+
 			}
-			else if (dir == UP)
-				if (i > i_top)
-					--i;
-				else {
-					dir = RIGHT;
-					++i_top;
-					++j;
-					
-				}
+		else if (dir == UP)
+			if (i > i_top)
+				--i;
+			else {
+				dir = RIGHT;
+				++i_top;
+				++j;
+
+			}
 
 	}
-		
+}
+#define SIZE 5
+
+int main(){
+	int a = SIZE;	// this variable will be needed in the future, for dynamically allocated array
+	int arr[SIZE][SIZE];	// instead of this static array with fixed size
+	
+	fillSpiralArray((int *)arr,a);
 
 	printf("\nHere you go:\n");
 	printSquareArr((int*)arr,a);
