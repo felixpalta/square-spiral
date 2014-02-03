@@ -11,12 +11,12 @@ the type of the pointer is the same as for
 regular linear array.
 That's not a bug, that's a feature.
 */
-void printRectArr(int *arr,int rows,int cols){
+void printRectArr(const int *const arr,const int rows,const int cols){
 	int i,j;
 	int k = 0;
 	for (i = 0; i < rows; ++i){
 		for (j = 0; j < cols; ++j){
-			k = arr[i * cols + j];	// (arr + i * cols) is an offset for the i-th row 
+			k = *(arr +i*cols +j);	// (arr + i * cols) is an offset for the i-th row 
 			printf("%4d ",k);
 		}
 		printf("\n");
@@ -24,7 +24,7 @@ void printRectArr(int *arr,int rows,int cols){
 
 }
 
-void fillRectArray(int *arr, int rows, int cols){
+void fillRectArray(int *const arr, const int rows, const int cols){
 	int i,j;
 	int i_top,i_bottom,j_right,j_left;	// borders of the spiral
 	int n;
@@ -47,7 +47,7 @@ void fillRectArray(int *arr, int rows, int cols){
 	n <= (rows * cols);
 
 	++n){
-		arr[i*cols + j] = n;
+		*(arr+i*cols + j) = n;
 		if (dir == RIGHT)
 			if (j < j_right)
 				++j;
@@ -83,18 +83,27 @@ void fillRectArray(int *arr, int rows, int cols){
 	}
 }
 
-#define SIZE 3
+#define SIZE 50
 
 int main(){
-	int a = SIZE;	// these variables will be needed in the future, for dynamically allocated array
-	int b = 2*SIZE;
+	int a=1,b=1;
+	int *arr;
+	printf("Input rectangular array dimensions, e.g. \"6 7\", then hit Enter.\n");
+	scanf("%d %d",&a,&b);
 
-	int arr[SIZE][2*SIZE];	// instead of this static array with fixed size
-	
-	fillRectArray((int *)arr,a,b);
+	arr = (int *) malloc(sizeof(int)*a*b); // 2-dimensional array allocated as a simple 1-dimensional one
 
-	printf("\nHere you go:\n");
-	printRectArr((int*)arr,a,b);
+	if (arr != NULL)
+	{
+		fillRectArray(arr,a,b);
+		
+		printRectArr(arr,a,b);
+
+		free(arr);
+	}
+	else {
+		printf("Can't allocate space\n");
+	}
 
 	getchar();
 }
