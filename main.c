@@ -4,19 +4,19 @@
 
 
 /*
-Takes a pointer to the square array *arr
-of size [a, a], and prints its elements.
+Takes a pointer to the rectangular array *arr
+of size [rows, cols], and prints its elements.
 Even though it is a 2-dimensional array,
 the type of the pointer is the same as for 
 regular linear array.
 That's not a bug, that's a feature.
 */
-void printSquareArr(int *arr,int a){
+void printRectArr(int *arr,int rows,int cols){
 	int i,j;
 	int k = 0;
-	for (i = 0; i < a; ++i){
-		for (j = 0; j < a; ++j){
-			k = *(arr+i*a+j);	// (arr + i * a) is an offset for the i-th row 
+	for (i = 0; i < rows; ++i){
+		for (j = 0; j < cols; ++j){
+			k = arr[i * cols + j];	// (arr + i * cols) is an offset for the i-th row 
 			printf("%4d ",k);
 		}
 		printf("\n");
@@ -24,7 +24,7 @@ void printSquareArr(int *arr,int a){
 
 }
 
-void fillSpiralArray(int *arr, int a){
+void fillRectArray(int *arr, int rows, int cols){
 	int i,j;
 	int i_top,i_bottom,j_right,j_left;	// borders of the spiral
 	int n;
@@ -41,12 +41,13 @@ void fillSpiralArray(int *arr, int a){
 	for (n=1,
 		i = j  = j_left = 0,
 		i_top = 1,
-		i_bottom = j_right = a-1; 
+		i_bottom = rows -1,
+		j_right = cols - 1;
 
-	n <= a*a;
+	n <= (rows * cols);
 
 	++n){
-		arr[i*a + j] = n;
+		arr[i*cols + j] = n;
 		if (dir == RIGHT)
 			if (j < j_right)
 				++j;
@@ -54,7 +55,6 @@ void fillSpiralArray(int *arr, int a){
 				dir = DOWN;
 				--j_right; // right border "shrinks" towards the center
 				++i;
-
 			}
 		else if (dir == DOWN)
 			if (i < i_bottom)
@@ -63,7 +63,6 @@ void fillSpiralArray(int *arr, int a){
 				dir = LEFT;
 				--i_bottom;
 				--j;
-
 			}
 		else if (dir == LEFT)
 			if(j > j_left)
@@ -72,7 +71,6 @@ void fillSpiralArray(int *arr, int a){
 				dir = UP;
 				++j_left;
 				--i;
-
 			}
 		else if (dir == UP)
 			if (i > i_top)
@@ -81,21 +79,22 @@ void fillSpiralArray(int *arr, int a){
 				dir = RIGHT;
 				++i_top;
 				++j;
-
 			}
-
 	}
 }
-#define SIZE 5
+
+#define SIZE 3
 
 int main(){
-	int a = SIZE;	// this variable will be needed in the future, for dynamically allocated array
-	int arr[SIZE][SIZE];	// instead of this static array with fixed size
+	int a = SIZE;	// these variables will be needed in the future, for dynamically allocated array
+	int b = 2*SIZE;
+
+	int arr[SIZE][2*SIZE];	// instead of this static array with fixed size
 	
-	fillSpiralArray((int *)arr,a);
+	fillRectArray((int *)arr,a,b);
 
 	printf("\nHere you go:\n");
-	printSquareArr((int*)arr,a);
+	printRectArr((int*)arr,a,b);
 
 	getchar();
 }
