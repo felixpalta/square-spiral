@@ -1,7 +1,38 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
+void printRectArr(const int *const arr,const int rows,const int cols);
+void fillRectArray(int *const arr, const int rows, const int cols);
 
+int main(){
+	int a=0,b=0,size;
+	int *arr;
+	printf("Input rectangular array dimensions, e.g. \"6 7\", then hit Enter.\n");
+	scanf("%d %d",&a,&b);
+	if (a > 0 && b > 0)
+	{
+		size = sizeof(int)*a*b;
+		arr = (int *) malloc(size); // 2-dimensional array allocated as a simple 1-dimensional one
+
+		if (arr != NULL)
+		{
+			memset((void *) arr,0,size);
+
+			fillRectArray(arr,a,b);
+
+			printRectArr(arr,a,b);
+
+			free(arr);
+		}
+		else
+			printf("Can't allocate space\n");
+	}
+	else
+		printf("Need two positive integers\n");
+
+	getchar();
+}
 
 /*
 Takes a pointer to the rectangular array *arr
@@ -16,12 +47,11 @@ void printRectArr(const int *const arr,const int rows,const int cols){
 	int k = 0;
 	for (i = 0; i < rows; ++i){
 		for (j = 0; j < cols; ++j){
-			k = *(arr +i*cols +j);	// (arr + i * cols) is an offset for the i-th row 
+			k = arr[i*cols +j];	// arr[i*cols +j] == a[i][j]
 			printf("%4d ",k);
 		}
 		printf("\n");
 	}
-
 }
 
 void fillRectArray(int *const arr, const int rows, const int cols){
@@ -47,8 +77,9 @@ void fillRectArray(int *const arr, const int rows, const int cols){
 	n <= (rows * cols);
 
 	++n){
-		*(arr+i*cols + j) = n;
-		if (dir == RIGHT)
+		arr[i*cols +j] = n;
+		switch (dir) {
+		case RIGHT:
 			if (j < j_right)
 				++j;
 			else {
@@ -56,7 +87,8 @@ void fillRectArray(int *const arr, const int rows, const int cols){
 				--j_right; // right border "shrinks" towards the center
 				++i;
 			}
-		else if (dir == DOWN)
+			break;
+		case DOWN:
 			if (i < i_bottom)
 				++i;
 			else {
@@ -64,7 +96,8 @@ void fillRectArray(int *const arr, const int rows, const int cols){
 				--i_bottom;
 				--j;
 			}
-		else if (dir == LEFT)
+			break;
+		case LEFT:
 			if(j > j_left)
 				--j;
 			else {
@@ -72,7 +105,8 @@ void fillRectArray(int *const arr, const int rows, const int cols){
 				++j_left;
 				--i;
 			}
-		else if (dir == UP)
+			break;
+		case UP:
 			if (i > i_top)
 				--i;
 			else {
@@ -80,30 +114,10 @@ void fillRectArray(int *const arr, const int rows, const int cols){
 				++i_top;
 				++j;
 			}
+			break;
+		default:
+			return;
+			break;
+		}
 	}
-}
-
-#define SIZE 50
-
-int main(){
-	int a=1,b=1;
-	int *arr;
-	printf("Input rectangular array dimensions, e.g. \"6 7\", then hit Enter.\n");
-	scanf("%d %d",&a,&b);
-
-	arr = (int *) malloc(sizeof(int)*a*b); // 2-dimensional array allocated as a simple 1-dimensional one
-
-	if (arr != NULL)
-	{
-		fillRectArray(arr,a,b);
-		
-		printRectArr(arr,a,b);
-
-		free(arr);
-	}
-	else {
-		printf("Can't allocate space\n");
-	}
-
-	getchar();
 }
