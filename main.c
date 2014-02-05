@@ -12,12 +12,10 @@ int main(){
 	scanf("%d %d",&a,&b);
 	if (a > 0 && b > 0)
 	{
-		size = sizeof(int)*a*b;
-		arr = (int *) malloc(size); // 2-dimensional array allocated as a simple 1-dimensional one
+		arr = (int *) calloc(a*b,sizeof(int)); // 2-dimensional array allocated as a simple 1-dimensional one, then initialized to zero
 
 		if (arr != NULL)
 		{
-			memset((void *) arr,0,size);
 
 			fillRectArray(arr,a,b);
 
