@@ -6,7 +6,7 @@ void printRectArr(const int *const arr,const int rows,const int cols);
 void fillRectArray(int *const arr, const int rows, const int cols);
 
 int main(){
-	int a=0,b=0,size;
+	int a=0,b=0;
 	int *arr;
 	printf("Input rectangular array dimensions, e.g. \"6 7\", then hit Enter.\n");
 	scanf("%d %d",&a,&b);
@@ -66,15 +66,13 @@ void fillRectArray(int *const arr, const int rows, const int cols){
 
 	DIRECTION dir = RIGHT;
 
-	for (n=1,
-		i = j  = j_left = 0,
+		i = j  = 0;
+		j_left = 0,
 		i_top = 1,
 		i_bottom = rows -1,
 		j_right = cols - 1;
 
-	n <= (rows * cols);
-
-	++n){
+	for (n=1; n <= (rows * cols);++n){
 		arr[i*cols +j] = n;
 		switch (dir) {
 		case RIGHT:
